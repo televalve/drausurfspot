@@ -23,14 +23,14 @@
   var series_1_channel_id = 276764;
   var series_1_field_number = 1;
   var series_1_read_api_key = '621JWHH5ZORZM1G9';
-  var series_1_results = 100;
+  var series_1_results = 10;
   var series_1_color = '#d62020';
 
   // variables for the second series
   var series_2_channel_id = 276764;
   var series_2_field_number = 7;
   var series_2_read_api_key = '621JWHH5ZORZM1G9';
-  var series_2_results = 100;
+  var series_2_results = 10;
   var series_2_color = '#00aaff';
 
   // chart title
@@ -47,7 +47,6 @@
   $(document).on('ready', function() {
     // add a blank chart
     addChart();
-   // addChart2();
     // add the first series
     addSeries(series_1_channel_id, series_1_field_number, series_1_read_api_key, series_1_results, series_1_color);
     // add the second series
@@ -103,50 +102,6 @@
     my_chart = new Highcharts.Chart(chartOptions);
   }
 
-// add the base chart
-  function addChart2() {
-    // variable for the local date in milliseconds
-    var localDate;
-
-    // specify the chart options
-    var chartOptions = {
-      chart: {
-        renderTo: 'chart-container2',
-        defaultSeriesType: 'line',
-        backgroundColor: '#ffffff',
-        events: { }
-      },
-      title: { text: chart_title },
-      plotOptions: {
-        series: {
-          marker: { radius: 3 },
-          animation: true,
-          step: false,
-          borderWidth: 0,
-          turboThreshold: 0
-        }
-      },
-      tooltip: {
-        // reformat the tooltips so that local times are displayed
-        formatter: function() {
-          var d = new Date(this.x + (my_offset*60000));
-          var n = (this.point.name === undefined) ? '' : '<br>' + this.point.name;
-          return this.series.name + ':<b>' + this.y + '</b>' + n + '<br>' + d.toDateString() + '<br>' + d.toTimeString().replace(/\(.*\)/, "");
-        }
-      },
-      xAxis: {
-        type: 'datetime',
-        title: { text: 'Date' }
-      },
-      yAxis: { title: { text: y_axis_title } },
-      exporting: { enabled: false },
-      legend: { enabled: false },
-      credits: {
-        text: 'ThingSpeak.com',
-        href: 'https://thingspeak.com/',
-        style: { color: '#D62020' }
-      }
-    };
 
     // draw the chart
     my_chart = new Highcharts.Chart(chartOptions);
