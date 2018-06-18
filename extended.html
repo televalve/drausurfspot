@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,12 +22,8 @@ var channelsLoaded = 0;
 // fieldList shows which field you want to load, and which axis to display that field on, 
 // the 'T' Temperature left axis, or the 'O' Other right axis.
 var channelKeys =[];
-channelKeys.push({channelNumber:9, name:'Hans my_house',key:'XXXXXXXXXXXXXXXX',
-                  fieldList:[{field:1,axis:'O'},{field:2,axis:'T'}]});
-channelKeys.push({channelNumber:5683, name:'Sam Rogers Solar System',key:'XXXXXXXXXXXXXXXX',
-   fieldList:[{field:1,axis:'T'},{field:2,axis:'T'},{field:3,axis:'T'},{field:4,axis:'T'},{field:5,axis:'T'},{field:6,axis:'T'}]});
-channelKeys.push({channelNumber:9354, name:'CRYSTAL CITY WEATHER Fault',key:'XXXXXXXXXXXXXXXX',
-   fieldList:[{field:1,axis:'T'},{field:2,axis:'O'},{field:3,axis:'O'},{field:4,axis:'O'},{field:5,axis:'O'},{field:6,axis:'O'}]});
+channelKeys.push({channelNumber:276764, name:'dss',key:'XXXXXXXXXXXXXXXX',
+                  fieldList:[{field:1,axis:'O'},{field:7,axis:'T'}]});
     
 // user's timezone offset
 var myOffset = new Date().getTimezoneOffset();
@@ -190,11 +187,7 @@ $(document).ready(function()
 			}
 		},
 		rangeSelector: {
-			buttons: [{
-				count: 30,
-				type: 'minute',
-				text: '30M'
-			}, {
+			buttons: [ {
 				count: 12,
 				type: 'hour',
 				text: '12H'
@@ -219,7 +212,7 @@ $(document).ready(function()
 				text: 'All'
 			}],
 			inputEnabled: true,
-			selected: 1
+			selected: 0
 		},
     title: {
 			text: ''
@@ -269,14 +262,14 @@ $(document).ready(function()
 		},
 		yAxis: [{
             title: {
-                text: 'Temperature °F'
+                text: 'ONE'
             },
             id: 'T'
     }, {
             title: {
-                text: 'second'
+                text: 'TWO'
             },
-            opposite: true,
+            opposite: false,
             id: 'O'
     }],
 		exporting: {
@@ -414,7 +407,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
   </head>
   <body style="                      background-color: white;">
     <div id="chart-container" style="height: 600px;"><br>
-      Highstock Chart Here<br>
+      ...loading...<br>
     </div>
     <div id="below chart"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
         name="Hide All Button"
