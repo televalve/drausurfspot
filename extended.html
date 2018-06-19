@@ -32,11 +32,13 @@
 
   <script type="text/javascript">
 
-
+  var channel_id = 276764;
+  var field_number = 1;
+  var read_api_key = '621JWHH5ZORZM1G9';
+  var results = 100;
     
 
-
-$.getJSON('https://www.highcharts.com/samples/data/aapl-c.json', function (data) {
+$.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/fields/' + field_number + '.json?offset=0&round=2&results=' + results + '&api_key=' + api_key, function(data) {
     // Create the chart
     Highcharts.stockChart('container', {
 
