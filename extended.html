@@ -1,3 +1,8 @@
+<title>Drau Surfspot</title>
+<!DOCTYPE html>
+<html style="height: 100%;">
+  <head>
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <div id="container" style="height: 400px; min-width: 600px; max-width: 800px; margin: 0 auto"></div>
 
@@ -5,6 +10,13 @@
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
 
+    <style type="text/css">
+  body { background-color: white; height: 100%; margin: 0; padding: 0; }
+  #chart-container { width: 825px; height: 335px; display: block; position:center; bottom:0; top:0; left:0; right:0; margin: 5px 15px 15px 0; overflow: hidden; }
+
+</style>
+
+    <script type="text/javascript">
 
 $.getJSON('https://www.highcharts.com/samples/data/aapl-c.json', function (data) {
     // Create the chart
@@ -73,5 +85,19 @@ $.getJSON('https://www.highcharts.com/samples/data/aapl-c.json', function (data)
         }]
     });
 });
+
+        </script>
+
+
+  
+</head>
+<body>
+	<center>
+   <div id="chart-container"> 
+    	<img alt="Ajax loader" src="//thingspeak.com/assets/loader-transparent.gif" style="position: absolute; margin: auto; top: 0; left: 0; right: 0; bottom: 0;" /> 
+   	</div> 
+	</center>
+</body>
+</html>
 
 
