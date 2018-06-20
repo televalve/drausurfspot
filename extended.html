@@ -395,7 +395,7 @@ $(document).ready(function() {
                 id: 'C'
             }],
             exporting: {
-                enabled: true,
+                enabled: false,
                 csv: {
                     dateFormat: '%d/%m/%Y %H:%M:%S %p'
                 }
@@ -404,6 +404,7 @@ $(document).ready(function() {
                 enabled: true
             },
             navigator: {
+                enabled: false
                 baseSeries: 0, //select which series to show in history navigator, First series is 0
                 series: {
                     includeInCSVExport: false
