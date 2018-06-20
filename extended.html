@@ -83,8 +83,8 @@ $.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/fields/' + fie
         },
 
         series: [{
-            name: 'AAPL',
-            data: data,
+            name: 'Windspeed',
+            data: data.feed,
             marker: {
                 enabled: null, // auto
                 radius: 3,
