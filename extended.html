@@ -32,6 +32,10 @@
 
 $.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/fields/' + field_number + '.json?offset=0&round=2&results=' + results + '&api_key=' + api_key, function(data) {
     // Create the chart
+    if (data == '-1') {
+       window.console && console.log('Thingspeak Data Loading Error');
+     }
+  
     Highcharts.stockChart('container', {
 
         chart: {
@@ -71,11 +75,11 @@ $.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/fields/' + fie
         },
 
         title: {
-            text: 'AAPL Stock Price'
+            text: 'Windspeed'
         },
 
         subtitle: {
-            text: 'Custom data grouping tied to range selector'
+            text: 'subt'
         },
 
         _navigator: {
@@ -84,7 +88,7 @@ $.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/fields/' + fie
 
         series: [{
             name: 'Windspeed',
-            data: data.feed,
+            data: data.feed[0],
             marker: {
                 enabled: null, // auto
                 radius: 3,
