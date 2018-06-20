@@ -45,7 +45,7 @@ $.getJSON('https://www.thingspeak.com/channels/'+channel_id+'/feed.json?callback
             allButtonsEnabled: true,
             buttons: [{
                 type: 'month',
-                count: 3,
+                count: 1,
                 text: 'Day',
                 dataGrouping: {
                     forced: true,
@@ -81,8 +81,8 @@ $.getJSON('https://www.thingspeak.com/channels/'+channel_id+'/feed.json?callback
             text: 'subt'
         },
 
-        _navigator: {
-            enabled: false
+        navigator: {
+            enabled: true
         },
 
         series: [{
