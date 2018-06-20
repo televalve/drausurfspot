@@ -87,7 +87,7 @@ $.getJSON('https://www.thingspeak.com/channels/'+channel_id+'/feed.json?callback
 
         series: [{
             name: 'Windspeed',
-            data: data.feed[0],
+            data: data.feeds[0],
             marker: {
                 enabled: null, // auto
                 radius: 3,
