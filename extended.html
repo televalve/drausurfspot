@@ -382,8 +382,7 @@ $(document).ready(function() {
                     includeInCSVExport: false
                 }
             },
-            series: [{
-            type: 'spline'}]
+            series: []
                 //series: [{data:[[getChartDate("2013-06-16T00:32:40Z"),75]]}]
         };
 
@@ -398,6 +397,7 @@ $(document).ready(function() {
                     index: channelKeys[channelIndex].fieldList[fieldIndex].series,
                     yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
                     //visible:false,
+                    type:'spline',
                     name: channelKeys[channelIndex].fieldList[fieldIndex].name
                 });
             }
