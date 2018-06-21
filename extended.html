@@ -289,7 +289,7 @@ $(document).ready(function() {
                     text: 'All'
                 }],
                 inputEnabled: true,
-                selected: 2 //Change to 4th button as default
+                selected: 1 //Change to 4th button as default
             },
             plotOptions: {
                 line: {
@@ -303,11 +303,11 @@ $(document).ready(function() {
                 },
                 series: {
                     marker: {
-                        radius: 2
+                        radius: 4
                     },
                     animation: true,
                     step: false,
-                    turboThrehold: 1000,
+                    turboThrehold: 0,
                     borderWidth: 0
                 }
             },
@@ -325,20 +325,20 @@ $(document).ready(function() {
                 //}
             },
             title: {
-                text: 'DSS',
+                text: 'Windgeschwindigkeit / Böe',
                 style: {
-                  "fontSize":"24px",
+                  "fontSize":"22px",
                   "fontFamily":"Roboto"
                 }
                 
             },
-            subtitle: {
+            /*subtitle: {
                 text: 'subt',
                 style: {
                   "fontSize":"14px",
                   "fontFamily":"Roboto"
                 }
-            },
+            },*/
             xAxis: {
                 type: 'datetime',
                 ordinal: false,
@@ -353,13 +353,13 @@ $(document).ready(function() {
             },
             yAxis: [{
                 title: {
-                    text: 'Intensitas Cahaya (lux)'
+                    text: ''
                 },
                 opposite: false,
                 id: 'Lux'
             }, {
                 title: {
-                    text: 'Humiditas (%rh)'
+                    text: ''
                 },
                 opposite: true,
                 id: '%RH'
@@ -439,7 +439,7 @@ $(document).ready(function() {
             window.console && console.log('channelIndex: ', channelIndex);
             (function(channelIndex) {
                 //load only 1 set of 8000 points
-                loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, 1);
+                //loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, 1);
             })(channelIndex);
         }
     }
@@ -450,7 +450,7 @@ function loadOneChannel() {
     var selectedChannel = document.getElementById("Channel Select");
     var maxLoads = document.getElementById("Loads").value;
     var channelIndex = selectedChannel.selectedIndex;
-    loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, maxLoads);
+  //  loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, maxLoads);
 }
 
 // load next 8000 points from a ThingSpeak channel and addPoints to a series
