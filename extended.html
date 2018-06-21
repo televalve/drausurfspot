@@ -344,6 +344,11 @@ $(document).ready(function() {
                 type: 'datetime',
                 ordinal: false,
                 min: Date.UTC(2018, 06, 10),
+                dateTimeLabelFormats: {
+                   minute: '<b>%H:%M</b>',
+                   hour: '%H:%M',
+                   day: '<b>%d day</b>'
+                }
               /*,
                 title: {
                     text: ''
