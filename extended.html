@@ -209,52 +209,52 @@ $(document).ready(function() {
                 zoomType: 'x',
                 events: {
                     load: function() {
-                //        if ('true' === 'true' && (''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1)) {
-                //            // If the update checkbox is checked, get latest data every 15 seconds and add it to the chart
-                //            setInterval(function() {
-                //                if (document.getElementById("Update").checked) {
-                //                    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-                //                    {
-                //                        (function(channelIndex) {
+                        if ('true' === 'true' && (''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1)) {
+                            // If the update checkbox is checked, get latest data every 15 seconds and add it to the chart
+                            setInterval(function() {
+                                if (document.getElementById("Update").checked) {
+                                    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+                                    {
+                                        (function(channelIndex) {
                                             // get the data with a webservice call
-                //                            $.getJSON('https://www.thingspeak.com/channels/' + channelKeys[channelIndex].channelNumber + '/feed/last.json?callback=?&amp;offset=0&amp;location=false;key=' +
-                //                                channelKeys[channelIndex].key,
-                //                                function(data) {
-                //                                    for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) {
-                //                                        // if data exists
-                //                                        var fieldStr = "data.field" + channelKeys[channelIndex].fieldList[fieldIndex].field;
-                //                                        var chartSeriesIndex = channelKeys[channelIndex].fieldList[fieldIndex].series;
-                //                                        if (data && eval(fieldStr)) {
-                 //                                           var p = [] //new Highcharts.Point();
-                  //                                          var v = eval(fieldStr);
-                   //                                         p[0] = getChartDate(data.created_at);
-                    //                                        p[1] = parseFloat(v);
+                                            $.getJSON('https://www.thingspeak.com/channels/' + channelKeys[channelIndex].channelNumber + '/feed/last.json?callback=?&amp;offset=0&amp;location=false;key=' +
+                                                channelKeys[channelIndex].key,
+                                                function(data) {
+                                                    for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) {
+                                                        // if data exists
+                                                        var fieldStr = "data.field" + channelKeys[channelIndex].fieldList[fieldIndex].field;
+                                                        var chartSeriesIndex = channelKeys[channelIndex].fieldList[fieldIndex].series;
+                                                        if (data && eval(fieldStr)) {
+                                                            var p = [] //new Highcharts.Point();
+                                                            var v = eval(fieldStr);
+                                                            p[0] = getChartDate(data.created_at);
+                                                            p[1] = parseFloat(v);
                                                             // get the last date if possible
-                                                            //if (dynamicChart.series[chartSeriesIndex].data.length > 0) {
-                                                            //    last_date = dynamicChart.series[chartSeriesIndex].data[dynamicChart.series[chartSeriesIndex].data.length - 1].x;
-                                                            //}
-                      //                                      var shift = false; //default for shift
-                                                            // if a numerical value exists and it is a new date, add it
-                                                            //if (!isNaN(parseInt(v)) && (p[0] != last_date)) {
-                                                            //    dynamicChart.series[chartSeriesIndex].addPoint(p, true, shift);
-                                                            //}
-                        //                                }
+                                                            if (dynamicChart.series[chartSeriesIndex].data.length > 0) {
+                                                                last_date = dynamicChart.series[chartSeriesIndex].data[dynamicChart.series[chartSeriesIndex].data.length - 1].x;
+                                                            }
+                                                            var shift = false; //default for shift
+                                                             if a numerical value exists and it is a new date, add it
+                                                            if (!isNaN(parseInt(v)) && (p[0] != last_date)) {
+                                                                dynamicChart.series[chartSeriesIndex].addPoint(p, true, shift);
+                                                            }
+                                                        }
                                                         //window.console && console.log('channelKeys:',channelKeys);
                                                         //window.console && console.log('chartSeriesIndex:',chartSeriesIndex);
                                                         //window.console && console.log('channel index:',channelIndex);
                                                         //window.console && console.log('field index:',fieldIndex);
                                                         //window.console && console.log('update series name:',dynamicChart.series[chartSeriesName].name);
                                                         //window.console && console.log('channel keys name:',channelKeys[channelIndex].fieldList[fieldIndex].name);
-                         //                           }
+                                                    }
 
 
-                           //                     });
-                           //             })(channelIndex);
-                           //         }
-                           //     }
-                           // }, 15000);
-               //         }
-              //      }
+                                                });
+                                        })(channelIndex);
+                                    }
+                                }
+                            }, 15000);
+                        }
+                    }
                 }
             },
             colors: ['#f9a825', '#00695c', '#c62828', '#f7a35c', '#8085e9', 
