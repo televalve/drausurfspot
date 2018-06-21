@@ -234,7 +234,7 @@ $(document).ready(function() {
                                                                 last_date = dynamicChart.series[chartSeriesIndex].data[dynamicChart.series[chartSeriesIndex].data.length - 1].x;
                                                             }
                                                             var shift = false; //default for shift
-                                                             if a numerical value exists and it is a new date, add it
+                                                            // if a numerical value exists and it is a new date, add it
                                                             if (!isNaN(parseInt(v)) && (p[0] != last_date)) {
                                                                 dynamicChart.series[chartSeriesIndex].addPoint(p, true, shift);
                                                             }
