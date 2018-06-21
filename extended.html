@@ -82,10 +82,10 @@ channelKeys.push({
     key: '',
     fieldList: [{
         field: 1,
-        axis: 'Lux'
+        axis: 'km/h'
     }, {
         field: 7,
-        axis: 'Lux'
+        axis: 'km/h'
     }]
 });
     
@@ -357,19 +357,19 @@ $(document).ready(function() {
                     text: ''
                 },
                 opposite: false,
-                id: 'Lux'
+                id: 'km/h'
             }, {
                 title: {
                     text: ''
                 },
                 opposite: true,
-                id: '%RH'
+                id: 'unknown'
             }, {
                 labels: {
-                    format: '{value}°C'
+                    format: '{value}km/h'
                 },
                 title: {
-                    text: 'Temperatur (°C)'
+                    text: 'Windgeschwindigkeit (km/h)'
                 },
                 opposite: true,
                 id: 'C'
