@@ -102,30 +102,26 @@ function getChartDate(d) {
 }
 
 // Hide all series, via 'Hide All' button.  Then user can click on serries name in legent to show series of interest.
-function HideAll() {
-    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
-    {
-        if (dynamicChart.series[index].name == 'Navigator')
-            continue;
-        dynamicChart.series[index].hide();
-        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
-    }
-    //});
-
-}
+//function HideAll() {
+//    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
+//    {
+//        if (dynamicChart.series[index].name == 'Navigator')
+//            continue;
+//        dynamicChart.series[index].hide();
+//        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
+//    }
+//}
 
 // Show all series, via 'Show All' button.  Then user can click on serries name in legend to show series of interest.
-function ShowAll() {
-    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
-    {
-        if (dynamicChart.series[index].name == 'Navigator')
-            continue;
-        dynamicChart.series[index].show();
-        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
-    }
-    //});
-
-}
+//function ShowAll() {
+//    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
+//    {
+//        if (dynamicChart.series[index].name == 'Navigator')
+//            continue;
+//        dynamicChart.series[index].show();
+//        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
+//    }
+//}
 
 //  This is where the chart is generated.
 $(document).ready(function() {
