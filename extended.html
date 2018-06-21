@@ -128,13 +128,13 @@ $(document).ready(function() {
 
     $('select').material_select();
     //Add Channel Load Menu
-    var menu = document.getElementById("Channel Select");
-    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-    {
-        window.console && console.log('Name', channelKeys[channelIndex].name);
-        var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
-        menu.options.add(menuOption, channelIndex);
-    }
+    //var menu = document.getElementById("Channel Select");
+    //for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    //{
+     //   window.console && console.log('Name', channelKeys[channelIndex].name);
+     //   var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
+     //   menu.options.add(menuOption, channelIndex);
+    //}
     var last_date; // variable for the last date added to the chart
     window.console && console.log('Testing console');
     //make series numbers for each field
