@@ -208,9 +208,6 @@ $(document).ready(function() {
             chart: {
                 renderTo: 'chart-container',
                 zoomType: 'x',
-                credits: {
-                    enabled:false
-                },
                 /*events: {
                     load: function() {
                         if ('true' === 'true' && (''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1)) {
@@ -384,6 +381,9 @@ $(document).ready(function() {
                 series: {
                     includeInCSVExport: false
                 }
+            },
+            credits: {
+                enabled: false
             },
             series: []
                 //series: [{data:[[getChartDate("2013-06-16T00:32:40Z"),75]]}]
