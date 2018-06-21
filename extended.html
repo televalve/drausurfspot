@@ -128,15 +128,15 @@ $(document).ready(function() {
 
     $('select').material_select();
     //Add Channel Load Menu
-    var menu = document.getElementById("Channel Select");
-    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-    {
-        window.console && console.log('Name', channelKeys[channelIndex].name);
-        var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
-        menu.options.add(menuOption, channelIndex);
-    }
+    //var menu = document.getElementById("Channel Select");
+    //for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    //{
+    //    window.console && console.log('Name', channelKeys[channelIndex].name);
+    //    var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
+    //    menu.options.add(menuOption, channelIndex);
+    //}
     var last_date; // variable for the last date added to the chart
-    window.console && console.log('Testing console');
+    //window.console && console.log('Testing console');
     //make series numbers for each field
     var seriesCounter = 0
     for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
@@ -162,7 +162,7 @@ $(document).ready(function() {
         var fieldList = sentFieldList;
         var channelIndex = sentChannelIndex;
         // get the Channel data with a webservice call
-        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=2500;key=' + key, function(data) {
+        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=200;key=' + key, function(data) {
                 // if no access
                 if (data == '-1') {
                     $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.');
