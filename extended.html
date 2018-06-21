@@ -52,20 +52,6 @@
                 <option value="" disabled selected>Choose your option</option>
                 <option value="1">1 Load</option>
                 <option value="2">2 Loads</option>
-                <option value="3">3 Loads</option>
-                <option value="4">4 Loads</option>
-                <option value="5" selected="selected">5 Loads</option>
-                <option value="6">6 Loads</option>
-                <option value="7">7 Loads</option>
-                <option value="8">8 Loads</option>
-                <option value="9">9 Loads</option>
-                <option value="10">10 Loads</option>
-                <option value="15">15 Loads</option>
-                <option value="20">20 Loads</option>
-                <option value="25">25 Loads</option>
-                <option value="30">30 Loads</option>
-                <option value="40">40 Loads</option>
-                <option value="50">50 Loads</option>
             </select>
           </div>
         </div>
@@ -210,7 +196,7 @@ $(document).ready(function() {
                 window.console && console.log('channels Loaded:', channelsLoaded);
                 window.console && console.log('channel index:', channelIndex);
                 if (channelsLoaded == channelKeys.length) {
-                  Highcharts.setOptions({lang:{weekdays:["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]}}); // Hari indonesia
+                  Highcharts.setOptions({lang:{weekdays:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]}}); // Hari indonesia
                     createChart();
                 }
             })
@@ -362,8 +348,8 @@ $(document).ready(function() {
                 ordinal: false,
                 min: Date.UTC(2013, 02, 28),
                 dateTimeLabelFormats: {
-                    hour: '%l %p',
-                    minute: '%l:%M %p'
+                    hour: '%H',
+                    minute: ':%M'
                 },
                 title: {
                     text: 'LeftAxis'
@@ -431,7 +417,7 @@ $(document).ready(function() {
         }
         // set chart labels here so that decoding occurs properly
         //chartOptions.title.text = data.channel.name;
-        chartOptions.xAxis.title.text = 'Date';
+        //chartOptions.xAxis.title.text = 'Date';
 
         // draw the chart
         dynamicChart = new Highcharts.StockChart(chartOptions);
