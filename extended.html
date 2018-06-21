@@ -208,7 +208,9 @@ $(document).ready(function() {
             chart: {
                 renderTo: 'chart-container',
                 zoomType: 'x',
-                credits: false,
+                credits: {
+                    enabled:false
+                },
                 /*events: {
                     load: function() {
                         if ('true' === 'true' && (''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1)) {
