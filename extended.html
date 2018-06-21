@@ -294,7 +294,7 @@ $(document).ready(function() {
             },
             plotOptions: {
                 line: {
-                    gapSize: 5
+                    gapSize: 1
                         //color: '#d62020'
                         //  },
                         //  bar: {
@@ -304,7 +304,7 @@ $(document).ready(function() {
                 },
                 series: {
                     marker: {
-                        radius: 4
+                        radius: 1
                     },
                     animation: true,
                     step: false,
@@ -325,6 +325,7 @@ $(document).ready(function() {
                 //return this.series.name + ':<b>' + this.y + '</b>' + n + '<br/>' + d.toDateString() + '<br/>' + d.toTimeString().replace(/\(.*\)/, "");
                 //}
             },
+            type: 'spline',
             title: {
                 text: 'Windgeschwindigkeit / Böe',
                 style: {
@@ -358,7 +359,7 @@ $(document).ready(function() {
                     format: '{value}km/h'
                 },
                 title: {
-                    text: 'Windgeschwindigkeit'
+                    text: ''
                 },
                 opposite: false,
                 id: 'km/h'
