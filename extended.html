@@ -9,6 +9,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/modules/windbarb.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <!-- <script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script> -->
 
@@ -34,15 +35,15 @@
     </div>
     <div style="margin: 0% 5% 0% 5%"" id="below chart">
         <div class="row">
-            <button class="btn waves-effect waves-light blue darken-3" value="km/h" name="km/h" onclick="HideAll();">km/h
+            <button class="btn waves-effect waves-light blue darken-3" value="km/h" name="km/h" onclick="HideAll();">km/h   
             </button>
             <button class="btn waves-effect waves-light blue darken-3" value="Knoten" name="Knoten" onclick="ShowAll();">Knoten
             </button>
-            <button class="btn waves-effect waves-light blue darken-3" value=" " name=" " onclick="loadOneChannel();"> </button>
+           <!-- <button class="btn waves-effect waves-light blue darken-3" value=" " name=" " onclick="loadOneChannel();"> </button> -->
             <!-- <input id="Update" name="Update" type="checkbox" /> -->
             <!-- <label for="Update" style="margin:0 8px">Update Charts (Latency)</label> -->
         </div>
-        <div class="row">
+   <!-- <div class="row">
            <div class="input-field col s4">
             <select id="Channel Select">
               <option value="" disabled selected>Choose your option</option>
@@ -55,7 +56,7 @@
                 <option value="2">2 Loads</option>
             </select>
           </div>
-        </div>
+        </div> -->
     </div>
 
 </body>
@@ -86,6 +87,9 @@ channelKeys.push({
     }, {
         field: 7,
         axis: 'km/h'
+    }, {
+        field: 8,
+        axis: '°'
     }]
 });
     
@@ -123,6 +127,7 @@ function getChartDate(d) {
 //        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
 //    }
 //}
+
 
 //  This is where the chart is generated.
 $(document).ready(function() {
@@ -163,7 +168,7 @@ $(document).ready(function() {
         var fieldList = sentFieldList;
         var channelIndex = sentChannelIndex;
         // get the Channel data with a webservice call
-        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=1010;key=' + key, function(data) {
+        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=800;key=' + key, function(data) {
                 // if no access
                 if (data == '-1') {
                     $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.');
@@ -177,10 +182,26 @@ $(document).ready(function() {
                         var p = [] //new Highcharts.Point();
                         var fieldStr = "data.feeds[" + h + "].field" + fieldList[fieldIndex].field;
                         var v = eval(fieldStr);
+                        var addIt = true;
                         p[0] = getChartDate(data.feeds[h].created_at);
-                        p[1] = parseFloat(v);
+                        
+                        if(fieldIndex == 2){
+                        	//p[0] = Date.UTC(2018, 6, 6, 23, 12, 42);
+                        	//    return Date.UTC(d.substring(0, 4), d.substring(5, 7) - 1, d.substring(8, 10), d.substring(11, 13), d.substring(14, 16), d.substring(17, 19)) - (myOffset * 60000);
+							if(!((h % 50) == 0)){
+								addIt = false;
+							}
+
+  							p[1] = 1;
+                        	p[2] = parseFloat(v);
+                        
+                        }
+                        else{
+                        	p[1] = parseFloat(v);
+                        }
+                      
                         // if a numerical value exists add it
-                        if (!isNaN(parseInt(v))) {
+                        if (!isNaN(parseInt(v)) && addIt) {
                             fieldList[fieldIndex].data.push(p);
                         }
                     }
@@ -193,7 +214,7 @@ $(document).ready(function() {
                 window.console && console.log('channels Loaded:', channelsLoaded);
                 window.console && console.log('channel index:', channelIndex);
                 if (channelsLoaded == channelKeys.length) {
-                  Highcharts.setOptions({lang:{weekdays:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]}}); // Hari indonesia
+                  Highcharts.setOptions({lang:{weekdays:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]}}); 
                     createChart();
                 }
             })
@@ -258,14 +279,10 @@ $(document).ready(function() {
                     }
                 }*/
             },
-            colors: ['#f9a825', '#00695c', '#c62828', '#f7a35c', '#8085e9', 
+            colors: ['#D62021', '#00AAFF', '#AFAF00', '#f7a35c', '#8085e9', 
    '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'],
             rangeSelector: {
                 buttons: [{
-                    count: 3,
-                    type: 'hour',
-                    text: '3h'
-                }, {
                     count: 12,
                     type: 'hour',
                     text: '12h'
@@ -304,7 +321,7 @@ $(document).ready(function() {
                 },
                 series: {
                     marker: {
-                        enabled: false,
+                        enabled: true,
                         radius: 3
                     },
                     animation: true,
@@ -344,7 +361,8 @@ $(document).ready(function() {
             xAxis: {
                 type: 'datetime',
                 ordinal: false,
-                min: Date.UTC(2018, 06, 10),
+                offset: 40,
+               // min: Date.UTC(2018, 7, 5),
                 dateTimeLabelFormats: {
                    minute: '%H:%M',
                    hour: '%H:%M',
@@ -365,6 +383,15 @@ $(document).ready(function() {
                 },
                 opposite: false,
                 id: 'km/h'
+            }, {
+                labels: {
+                    format: '{value}°'
+                },
+                title: {
+                    text: 'winddir'
+                },
+                opposite: true,
+                id: '°'
             }],
             scrollbar: {
                 enabled: true
@@ -389,6 +416,8 @@ $(document).ready(function() {
                 enabled: false
             },
             series: []
+         
+            
                 //series: [{data:[[getChartDate("2013-06-16T00:32:40Z"),75]]}]
         };
 
@@ -397,15 +426,34 @@ $(document).ready(function() {
         {
             for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // add each field
             {
-                window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
-                chartOptions.series.push({
-                    data: channelKeys[channelIndex].fieldList[fieldIndex].data,
-                    index: channelKeys[channelIndex].fieldList[fieldIndex].series,
-                    yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
-                    //visible:false,
-                    type:'spline',
-                    name: channelKeys[channelIndex].fieldList[fieldIndex].name
-                });
+            	if(fieldIndex == 0 || fieldIndex == 1){
+                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+                		chartOptions.series.push({
+                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+                   	 	//visible:false,
+                   	 	type:'spline',
+                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+                	});
+                }
+                else if(fieldIndex == 2){
+                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+                		chartOptions.series.push({
+                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+                   	 	//visible:false,
+                   	 	type:'windbarb',
+                   	 	showInLegend: true,
+
+
+//                    	 	marker:{
+//                    	 		radius: 3
+//                    	 	},
+                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+                	});
+                }
             }
         }
         // set chart labels here so that decoding occurs properly
@@ -442,16 +490,16 @@ $(document).ready(function() {
     }
 });
 
-function loadOneChannel() {
+/*function loadOneChannel() {
     // load a channel selected in the popUp menu.
     var selectedChannel = document.getElementById("Channel Select");
     var maxLoads = document.getElementById("Loads").value;
     var channelIndex = selectedChannel.selectedIndex;
   //  loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, maxLoads);
-}
+}*/
 
 // load next 8000 points from a ThingSpeak channel and addPoints to a series
-function loadChannelHistory(sentChannelIndex, channelNumber, key, sentFieldList, sentNumLoads, maxLoads) {
+/*function loadChannelHistory(sentChannelIndex, channelNumber, key, sentFieldList, sentNumLoads, maxLoads) {
     var numLoads = sentNumLoads
     var fieldList = sentFieldList;
     var channelIndex = sentChannelIndex;
@@ -506,7 +554,7 @@ function loadChannelHistory(sentChannelIndex, channelNumber, key, sentFieldList,
             loadChannelHistory(channelIndex, channelNumber, key, fieldList, numLoads, maxLoads);
         }
     });
-}
+}*/
 
 //# sourceURL=pen.js
 </script>
