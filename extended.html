@@ -34,15 +34,17 @@
 
     </div>
     <div style="margin: 0% 5% 0% 5%"" id="below chart">
+        
         <div class="row">
-            <button class="btn waves-effect waves-light blue darken-3" value="km/h" name="km/h" onclick="HideAll();">km/h   
+            <button class="btn waves-effect waves-light blue darken-3" value="km/h" name="km/h" onclick="setkmh();">km/h   
             </button>
-            <button class="btn waves-effect waves-light blue darken-3" value="Knoten" name="Knoten" onclick="ShowAll();">Knoten
+            <button class="btn waves-effect waves-light blue darken-3" value="Knoten" name="Knoten" onclick="setknoten();">Knoten
             </button>
            <!-- <button class="btn waves-effect waves-light blue darken-3" value=" " name=" " onclick="loadOneChannel();"> </button> -->
             <!-- <input id="Update" name="Update" type="checkbox" /> -->
             <!-- <label for="Update" style="margin:0 8px">Update Charts (Latency)</label> -->
         </div>
+        
    <!-- <div class="row">
            <div class="input-field col s4">
             <select id="Channel Select">
@@ -93,7 +95,16 @@ channelKeys.push({
     }]
 });
     
-    
+var isKnoten = "isKnoten";
+if(getCookie(isKnoten) == ""){
+	setCookie(isKnoten, "1");
+}
+
+var zoom = "zoom";
+if(getCookie(zoom) == ""){
+	setCookie(isKnoten, "1");
+}
+
     
 // user's timezone offset
 var myOffset = new Date().getTimezoneOffset();
@@ -106,65 +117,164 @@ function getChartDate(d) {
     return Date.UTC(d.substring(0, 4), d.substring(5, 7) - 1, d.substring(8, 10), d.substring(11, 13), d.substring(14, 16), d.substring(17, 19)) - (myOffset * 60000);
 }
 
-// Hide all series, via 'Hide All' button.  Then user can click on serries name in legent to show series of interest.
-//function HideAll() {
-//    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
-//    {
-//        if (dynamicChart.series[index].name == 'Navigator')
-//            continue;
-//        dynamicChart.series[index].hide();
-//        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
-//    }
-//}
+function setknoten(){
+	if(getCookie(isKnoten) == "0"){
+		setCookie(isKnoten, "1");
+		updateAllChannels();
+		
+	}
+}
 
-// Show all series, via 'Show All' button.  Then user can click on serries name in legend to show series of interest.
-//function ShowAll() {
-//    for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
-//    {
-//        if (dynamicChart.series[index].name == 'Navigator')
-//            continue;
-//        dynamicChart.series[index].show();
-//        //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
-//    }
-//}
+function setkmh(){
+	if(getCookie(isKnoten) == "1"){
+		setCookie(isKnoten, "0");
+		updateAllChannels();
+	}
+}
 
+function updateAllChannels(){
+	for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    	{
+    		channelsLoaded = 0;
+       	 	channelKeys[channelIndex].loaded = false;
+       	 	loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, false);
+    	}
+    
+}
 
-//  This is where the chart is generated.
-$(document).ready(function() {
+function setCookie(cname, cvalue) {
+   // var d = new Date();
+   // d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    //var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue;// + ";" + expires + ";path=/";
+}
 
-    $('select').material_select();
-    //Add Channel Load Menu
-    //var menu = document.getElementById("Channel Select");
-    //for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-    //{
-    //    window.console && console.log('Name', channelKeys[channelIndex].name);
-    //    var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
-    //    menu.options.add(menuOption, channelIndex);
-    //}
-    var last_date; // variable for the last date added to the chart
-    //window.console && console.log('Testing console');
-    //make series numbers for each field
-    var seriesCounter = 0
-    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-    {
-        for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // iterate through each channel
-        {
-            channelKeys[channelIndex].fieldList[fieldIndex].series = seriesCounter;
-            seriesCounter++;
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
         }
     }
-    //make calls to load data from each channel into channelKeys array now
-    // draw the chart when all the data arrives, later asyncronously add history
-    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-    {
-        channelKeys[channelIndex].loaded = false;
-        loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList);
+    return "";
+}
 
-    }
-    //window.console && console.log('Channel Keys',channelKeys);
+// Hide all series, via 'Hide All' button.  Then user can click on serries name in legent to show series of interest.
+/*function HideAll() {
+   for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
+   {
+       if (dynamicChart.series[index].name == 'Navigator')
+           continue;
+       dynamicChart.series[index].hide();
+       //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
+   }
+}*/
+// Show all series, via 'Show All' button.  Then user can click on serries name in legend to show series of interest.
+/*function ShowAll() {
+   for (var index = 0; index < dynamicChart.series.length; index++) // iterate through each series
+   {
+       if (dynamicChart.series[index].name == 'Navigator')
+           continue;
+       dynamicChart.series[index].show();
+       //window.console && console.log('Series Number:',index,' Name:',dynamicChart.series[index].name);
+   }
+}*/
 
-    // load the most recent 2500 points (fast initial load) from a ThingSpeak channel into a data[] array and return the data[] array
-    function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList) {
+function addChartSeries(){
+        // add all Channel data to the chart
+        for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+        {
+            for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // add each field
+            {
+            
+            	dynamicChart.series[fieldIndex].setData(channelKeys[channelIndex].fieldList[fieldIndex].data, false);
+            
+            	// if(fieldIndex == 0 || fieldIndex == 1){
+//                 	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+//                 		chartOptions.series.push({
+//                    	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+//                    	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+//                    	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+//                    	 	//visible:false,
+//                    	 	type:'spline',
+//                    	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+//                 	});
+//                 }
+//                 else if(fieldIndex == 2){
+//                 	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+//                 		chartOptions.series.push({
+//                    	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+//                    	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+//                    	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+//                    	 	//visible:false,
+//                    	 	type:'windbarb',
+//                    	 	showInLegend: true,
+// 
+// 
+// //                    	 	marker:{
+// //                    	 		radius: 3
+// //                    	 	},
+//                    	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+//                 	});
+//                 }
+            }
+        }
+        // set chart labels here so that decoding occurs properly
+        //chartOptions.title.text = data.channel.name;
+        //chartOptions.xAxis.title.text = 'Date';
+}
+
+
+function addChartSeriesData(chartOptions){
+        // add all Channel data to the chart
+        for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+        {
+            for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // add each field
+            {
+            	if(fieldIndex == 0 || fieldIndex == 1){
+                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+                		chartOptions.series.push({
+                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+                   	 	//visible:false,
+                   	 	type:'spline',
+                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+                	});
+                }
+                else if(fieldIndex == 2){
+                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+                		chartOptions.series.push({
+                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
+                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
+                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
+                   	 	//visible:false,
+                   	 	type:'windbarb',
+                   	 	showInLegend: true,
+
+
+//                    	 	marker:{
+//                    	 		radius: 3
+//                    	 	},
+                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
+                	});
+                }
+            }
+        }
+        // set chart labels here so that decoding occurs properly
+        //chartOptions.title.text = data.channel.name;
+        //chartOptions.xAxis.title.text = 'Date';
+}
+
+
+  // load the most recent 2500 points (fast initial load) from a ThingSpeak channel into a data[] array and return the data[] array
+    function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList, firstLoad) {
         var fieldList = sentFieldList;
         var channelIndex = sentChannelIndex;
         // get the Channel data with a webservice call
@@ -176,7 +286,9 @@ $(document).ready(function() {
                 }
                 for (var fieldIndex = 0; fieldIndex < fieldList.length; fieldIndex++) // iterate through each field
                 {
+                	console.log('LOAD TS CHANNEL ' + fieldIndex);
                     fieldList[fieldIndex].data = [];
+                    
                     for (var h = 0; h < data.feeds.length; h++) // iterate through each feed (data point)
                     {
                         var p = [] //new Highcharts.Point();
@@ -188,7 +300,7 @@ $(document).ready(function() {
                         if(fieldIndex == 2){
                         	//p[0] = Date.UTC(2018, 6, 6, 23, 12, 42);
                         	//    return Date.UTC(d.substring(0, 4), d.substring(5, 7) - 1, d.substring(8, 10), d.substring(11, 13), d.substring(14, 16), d.substring(17, 19)) - (myOffset * 60000);
-							if(!((h % 50) == 0)){
+							if(!((h % 20) == 0)){
 								addIt = false;
 							}
 
@@ -196,8 +308,13 @@ $(document).ready(function() {
                         	p[2] = parseFloat(v);
                         
                         }
-                        else{
-                        	p[1] = parseFloat(v);
+                        else if(fieldIndex == 1 || fieldIndex == 0){
+                        	if(getCookie(isKnoten) == "1"){
+	                        	p[1] = parseFloat(v) * 0.539957; // convert to knots/knoten
+	                        }
+	                        else{
+								p[1] = parseFloat(v);
+	                        }
                         }
                       
                         // if a numerical value exists add it
@@ -213,15 +330,21 @@ $(document).ready(function() {
                 channelsLoaded++;
                 window.console && console.log('channels Loaded:', channelsLoaded);
                 window.console && console.log('channel index:', channelIndex);
-                if (channelsLoaded == channelKeys.length) {
+                
+                if (channelsLoaded == channelKeys.length && firstLoad == true) {
                   Highcharts.setOptions({lang:{weekdays:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]}}); 
-                    createChart();
+                  createChart();
                 }
+                else{
+                		addChartSeries();
+                       	dynamicChart.redraw();
+				}
             })
             .fail(function() {
                 alert('getJSON request failed! ');
             });
     }
+
     // create the chart when all data is loaded
     function createChart() {
         // specify the chart options
@@ -376,7 +499,14 @@ $(document).ready(function() {
             yAxis: [{
                 
                 labels: {
-                    format: '{value}km/h'
+                    formatter: function(){
+                        if(getCookie(isKnoten) == "1"){
+                    		return this.value + " Knoten";
+                   		}
+                    	else{
+                    		return this.value + " km/h";
+                    	}
+                    }
                 },
                 title: {
                     text: ''
@@ -421,47 +551,13 @@ $(document).ready(function() {
                 //series: [{data:[[getChartDate("2013-06-16T00:32:40Z"),75]]}]
         };
 
-        // add all Channel data to the chart
-        for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
-        {
-            for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // add each field
-            {
-            	if(fieldIndex == 0 || fieldIndex == 1){
-                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
-                		chartOptions.series.push({
-                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
-                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
-                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
-                   	 	//visible:false,
-                   	 	type:'spline',
-                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
-                	});
-                }
-                else if(fieldIndex == 2){
-                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
-                		chartOptions.series.push({
-                   	 	data: channelKeys[channelIndex].fieldList[fieldIndex].data,
-                   	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
-                   	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
-                   	 	//visible:false,
-                   	 	type:'windbarb',
-                   	 	showInLegend: true,
+		addChartSeriesData(chartOptions);
 
-
-//                    	 	marker:{
-//                    	 		radius: 3
-//                    	 	},
-                   	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
-                	});
-                }
-            }
-        }
-        // set chart labels here so that decoding occurs properly
-        //chartOptions.title.text = data.channel.name;
-        //chartOptions.xAxis.title.text = 'Date';
 
         // draw the chart
         dynamicChart = new Highcharts.StockChart(chartOptions);
+        
+
 
         // update series number to account for the navigator series (The historical series at the bottom) which is the first series.
         for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
@@ -488,7 +584,44 @@ $(document).ready(function() {
             })(channelIndex);
         }
     }
+
+//  This is where the chart is generated.
+$(document).ready(function() {
+
+    $('select').material_select();
+    //Add Channel Load Menu
+    //var menu = document.getElementById("Channel Select");
+    //for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    //{
+    //    window.console && console.log('Name', channelKeys[channelIndex].name);
+    //    var menuOption = new Option(channelKeys[channelIndex].name, channelIndex);
+    //    menu.options.add(menuOption, channelIndex);
+    //}
+    var last_date; // variable for the last date added to the chart
+    //window.console && console.log('Testing console');
+    //make series numbers for each field
+    var seriesCounter = 0
+    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    {
+        for (var fieldIndex = 0; fieldIndex < channelKeys[channelIndex].fieldList.length; fieldIndex++) // iterate through each channel
+        {
+            channelKeys[channelIndex].fieldList[fieldIndex].series = seriesCounter;
+            seriesCounter++;
+        }
+    }
+    //make calls to load data from each channel into channelKeys array now
+    // draw the chart when all the data arrives, later asyncronously add history
+    for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
+    {
+        channelKeys[channelIndex].loaded = false;
+        loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, true);
+
+    }
+    //window.console && console.log('Channel Keys',channelKeys);
+
 });
+
+
 
 /*function loadOneChannel() {
     // load a channel selected in the popUp menu.
