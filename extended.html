@@ -1,5 +1,11 @@
 <!DOCTYPE html><html lang='en' class=''>
-<head><script src='//static.codepen.io/assets/editor/live/console_runner-ce3034e6bde3912cc25f83cccb7caa2b0f976196f2f2d52303a462c826d54a73.js'></script><script src='//static.codepen.io/assets/editor/live/css_live_reload_init-890dc39bb89183d4642d58b1ae5376a0193342f9aed88ea04330dc14c8d52f55.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="https://codepen.io/hyuwah/pen/MyqqWb" />
+<head>
+<!--<script src='//static.codepen.io/assets/editor/live/console_runner-ce3034e6bde3912cc25f83cccb7caa2b0f976196f2f2d52303a462c826d54a73.js'></script>
+<script src='//static.codepen.io/assets/editor/live/css_live_reload_init-890dc39bb89183d4642d58b1ae5376a0193342f9aed88ea04330dc14c8d52f55.js'>
+</script><meta charset='UTF-8'><meta name="robots" content="noindex">
+<link rel="shortcut icon" type="image/x-icon" href="//static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+<link rel="mask-icon" type="" href="//static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+<link rel="canonical" href="https://codepen.io/hyuwah/pen/MyqqWb" />-->
 
 
 <style class="cp-pen-styles"></style></head><body>
@@ -43,7 +49,19 @@
            <!-- <button class="btn waves-effect waves-light blue darken-3" value=" " name=" " onclick="loadOneChannel();"> </button> -->
             <!-- <input id="Update" name="Update" type="checkbox" /> -->
             <!-- <label for="Update" style="margin:0 8px">Update Charts (Latency)</label> -->
+            
+            <button style="float: right;" class="btn waves-effect waves-light blue darken-3" value="3" name="zoom3" onclick="setZoom(this);">Woche   
+            </button>
+            <button style="float: right;" class="btn waves-effect waves-light blue darken-3" value="2" name="zoom2" onclick="setZoom(this);">Tag   
+            </button>
+            <button style="float: right;" class="btn waves-effect waves-light blue darken-3" value="1" name="zoom1" onclick="setZoom(this);">12 Stunden   
+            </button>
+            <button style="float: right;" class="btn waves-effect waves-light blue darken-3" value="0" name="zoom0" onclick="setZoom(this);">3 Stunden   
+            </button>
+
         </div>
+        
+
         
    <!-- <div class="row">
            <div class="input-field col s4">
@@ -65,7 +83,7 @@
 
 </html>
 
-<script src='//static.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+<!-- <script src='//static.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script> -->
 <script >// Webpage Javascript to chart multiple ThingSpeak channels on two axis with navigator, load historical data, and export cvs data.
 // Public Domain, by turgo.
 //  The charting library is called HighStock.  It is awesome!  HighSoft, the owners say,
@@ -94,7 +112,9 @@ channelKeys.push({
         axis: '°'
     }]
 });
-    
+// user's timezone offset
+var myOffset = new Date().getTimezoneOffset();
+ 
 var isKnoten = "isKnoten";
 if(getCookie(isKnoten) == ""){
 	setCookie(isKnoten, "1");
@@ -102,12 +122,48 @@ if(getCookie(isKnoten) == ""){
 
 var zoom = "zoom";
 if(getCookie(zoom) == ""){
-	setCookie(isKnoten, "1");
+	setCookie(isKnoten, "0");
 }
 
+function setZoom(btn){
+	if(getCookie(zoom) != btn.value){
+		setCookie(zoom, btn.value);
+
+		updateAllChannels();	
+	}
+}
     
-// user's timezone offset
-var myOffset = new Date().getTimezoneOffset();
+function getNumPoints(){
+	var level = getCookie(zoom);
+	if(level == 0){
+		return 20; 
+	}
+	else if(level == 1){
+		return 75;
+	}
+	else if(level == 2){
+		return 130;
+	}
+	else if(level == 3){
+		return 900;
+	}
+}
+
+function getSkipPoints(){
+	var level = getCookie(zoom);
+	if(level == 0){
+		return 20; 
+	}
+	else if(level == 1){
+		return 75;
+	}
+	else if(level == 2){
+		return 130;
+	}
+	else if(level == 3){
+		return 900;
+	}
+}
 
 // converts date format from JSON
 function getChartDate(d) {
@@ -121,7 +177,6 @@ function setknoten(){
 	if(getCookie(isKnoten) == "0"){
 		setCookie(isKnoten, "1");
 		updateAllChannels();
-		
 	}
 }
 
@@ -137,9 +192,8 @@ function updateAllChannels(){
     	{
     		channelsLoaded = 0;
        	 	channelKeys[channelIndex].loaded = false;
-       	 	loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, false);
+       	 	loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, false, 200);
     	}
-    
 }
 
 function setCookie(cname, cvalue) {
@@ -278,7 +332,7 @@ function addChartSeriesData(chartOptions){
         var fieldList = sentFieldList;
         var channelIndex = sentChannelIndex;
         // get the Channel data with a webservice call
-        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=800;key=' + key, function(data) {
+        $.getJSON('https://www.thingspeak.com/channels/' + channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=' + getNumPoints() + ';key=' + key, function(data) {
                 // if no access
                 if (data == '-1') {
                     $('#chart-container').append('This channel is not public.  To embed charts, the channel must be public or a read key must be specified.');
@@ -403,9 +457,9 @@ function addChartSeriesData(chartOptions){
                 }*/
             },
             colors: ['#D62021', '#00AAFF', '#AFAF00', '#f7a35c', '#8085e9', 
-   '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'],
+   					'#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'],
             rangeSelector: {
-                buttons: [{
+                /*buttons: [{
                     count: 12,
                     type: 'hour',
                     text: '12h'
@@ -428,9 +482,9 @@ function addChartSeriesData(chartOptions){
                 }, {
                     type: 'all',
                     text: 'All'
-                }*/],
-                inputEnabled: false,
-                selected: 1 //Change to 4th button as default
+                }*///],
+                enabled: false
+               // selected: 1 //Change to 4th button as default
             },
             plotOptions: {
                 line: {
@@ -455,19 +509,19 @@ function addChartSeriesData(chartOptions){
             },
             tooltip: {
                 shared: true,
-                valueDecimals: 1,
-                //xDateFormat:'%Y-%m-%d<br/>%H:%M:%S %p' //bug fix
-
-
-                // reformat the tooltips so that local times are displayed
-                //formatter: function() {
-                //var d = new Date(this.x + (myOffset*60000));
-                //var n = (this.point.name === undefined) ? '' : '<br/>' + this.point.name;
-                //return this.series.name + ':<b>' + this.y + '</b>' + n + '<br/>' + d.toDateString() + '<br/>' + d.toTimeString().replace(/\(.*\)/, "");
-                //}
+                valueDecimals: 1// ,
+//                 
+//                 pointFormatter: function() {
+//        				 var seriesNameConverter = {
+//            			 'Wind Speed[km/h]': 'Series One Name',
+//            			 'Wind Speed Gust[km/h]': 'Series Two Name'
+//       				  };
+// 
+//         		return '<span style="color:{point.color}">\u25CF</span> ' + seriesNameConverter[this.series.name] + ': <b>' + this.y + '</b><br/>';
+//     			}		
             },
             title: {
-                text: 'Windgeschwindigkeit / Böe',
+                text: 'Wetterstation Drau',
                 style: {
                   "fontSize":"22px",
                   "fontFamily":"Roboto"
@@ -518,13 +572,13 @@ function addChartSeriesData(chartOptions){
                     format: '{value}°'
                 },
                 title: {
-                    text: 'winddir'
+                    text: ''
                 },
                 opposite: true,
                 id: '°'
             }],
             scrollbar: {
-                enabled: true
+                enabled: false
             },
             exporting: {
                 enabled: false,
