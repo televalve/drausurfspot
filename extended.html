@@ -102,10 +102,10 @@ channelKeys.push({
     name: 'DSS',
     key: '',
     fieldList: [{
-        field: 1,
+        field: 7,
         axis: 'km/h'
     }, {
-        field: 7,
+        field: 1,
         axis: 'km/h'
     }, {
         field: 8,
@@ -162,6 +162,16 @@ function getSkipPoints(){
 	}
 	else if(level == 3){
 		return 20;
+	}
+}
+
+function getWindspeedUnit(){
+	if(getCookie(isKnoten) == "1"){
+		return "Knoten";
+	}
+	else{
+		return "km/h";
+
 	}
 }
 
@@ -311,8 +321,7 @@ function addChartSeriesData(chartOptions){
                    	 	//visible:false,
                    	 	type:'windbarb',
                    	 	showInLegend: true,
-
-
+						vectorLength: 25,
 //                    	 	marker:{
 //                    	 		radius: 3
 //                    	 	},
@@ -586,6 +595,24 @@ function addChartSeriesData(chartOptions){
                     dateFormat: '%d/%m/%Y %H:%M:%S %p'
                 }
             },
+            tooltip: {
+        headerFormat: "",
+        useHTML: true,
+        formatter: function () {
+        
+        
+            var s = '<span style="font-size: 11px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
+
+            $.each(this.points, function () {
+            	if(this.series.name == "Böe Windrichtung"){
+            	}
+            	else
+                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + " " + getWindspeedUnit() + '</b><br/>'; 
+            });
+
+            return s;
+        }
+    },
             legend: {
                 enabled: true
             },
