@@ -32,6 +32,12 @@
 </head>
 
 <body style="background-color: white;">
+<header>
+<center>
+  <h5>Selkach Drau-Wetterstation</h5>
+  <p></p>
+  </center>
+</header>
     <div id="chart-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
         <div class="progress" style="margin:0% 0%">
             
@@ -40,6 +46,13 @@
 
     </div>
     <div id="chartTemp-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
+    	<div class="progress" style="margin:0% 0%">
+            
+        	<div class="indeterminate"></div>
+        </div>
+
+    </div>
+        <div id="chartDebug-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
     	<div class="progress" style="margin:0% 0%">
             
         	<div class="indeterminate"></div>
@@ -99,6 +112,7 @@
 // http://forum.arduino.cc/index.php?topic=213058.msg1560990#msg1560990
 var dynamicChart;
 var dynamicChartTemp;
+var dynamicChartDebug;
 var channelsLoaded = 0;
 // put your ThingSpeak Channel#, Channel Name, and API keys here.
 // fieldList shows which field you want to load, and which axis to display that field on,
@@ -132,6 +146,23 @@ channelKeysTemp.push({
     }, {
         field: 5,
         axis: 'hPa'
+    }/*, {
+        field: 6,
+        axis: '%'
+    }*/]
+});
+
+var channelKeysDebug = [];
+channelKeysDebug.push({
+    channelNumber: 289328, //Channel ID
+    name: 'DSS Debug',
+    key: '',
+    fieldList: [{
+        field: 4,
+        axis: '%'
+    }, {
+        field: 6,
+        axis: ''
     }/*, {
         field: 6,
         axis: '%'
@@ -228,13 +259,17 @@ function updateAllChannels(){
     	{
     		channelsLoaded = 0;
        	 	channelKeys[channelIndex].loaded = false;
-       	 	loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, false, false);
+       	 	loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, false, false, false);
     	}
 	for (var channelIndex = 0; channelIndex < channelKeysTemp.length; channelIndex++) // iterate through each channel
     {
-
         channelKeysTemp[channelIndex].loaded = false;
-        loadThingSpeakChannel(channelIndex, channelKeysTemp[channelIndex].channelNumber, channelKeysTemp[channelIndex].key, channelKeysTemp[channelIndex].fieldList, true, true);
+        loadThingSpeakChannel(channelIndex, channelKeysTemp[channelIndex].channelNumber, channelKeysTemp[channelIndex].key, channelKeysTemp[channelIndex].fieldList, false, true, false);
+    }
+    for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+    {
+        channelKeysDebug[channelIndex].loaded = false;
+        loadThingSpeakChannel(channelIndex, channelKeysDebug[channelIndex].channelNumber, channelKeysDebug[channelIndex].key, channelKeysDebug[channelIndex].fieldList, false, false, true);
     }
 }
 
@@ -341,6 +376,18 @@ function addChartSeriesTemp(){
         }
 }
 
+function addChartSeriesDebug(){
+	window.console && console.log('ADD CHART SERIES DEBUG');
+
+        // add all Channel data to the chart
+        for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+        {
+            for (var fieldIndex = 0; fieldIndex < channelKeysDebug[channelIndex].fieldList.length; fieldIndex++) // add each field
+            {
+            	dynamicChartDebug.series[fieldIndex].setData(channelKeysDebug[channelIndex].fieldList[fieldIndex].data, false);
+            }
+        }
+}
 
 function addChartSeriesData(chartOptions){
 			window.console && console.log('ADD CHART SERIES DATA');
@@ -392,7 +439,6 @@ function addChartSeriesDataTemp(chartOptions){
         {
             for (var fieldIndex = 0; fieldIndex < channelKeysTemp[channelIndex].fieldList.length; fieldIndex++) // add each field
             {
-            	//if(fieldIndex == 0 || fieldIndex == 1){
                 	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
                 		chartOptions.series.push({
                    	 	data: channelKeysTemp[channelIndex].fieldList[fieldIndex].data,
@@ -402,33 +448,34 @@ function addChartSeriesDataTemp(chartOptions){
                    	 	type:'spline',
                    	 	name: channelKeysTemp[channelIndex].fieldList[fieldIndex].name
                 	});
-            /*    }
-                else if(fieldIndex == 2){
-                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
-                		chartOptions.series.push({
-                   	 	data: channelKeysTemp[channelIndex].fieldList[fieldIndex].data,
-                   	 	index: channelKeysTemp[channelIndex].fieldList[fieldIndex].series,
-                   	 	yAxis: channelKeysTemp[channelIndex].fieldList[fieldIndex].axis,
-                   	 	//visible:false,
-                   	 	type:'windbarb',
-                   	 	showInLegend: true,
-						vectorLength: 25,
-//                    	 	marker:{
-//                    	 		radius: 3
-//                    	 	},
-                   	 	name: channelKeysTemp[channelIndex].fieldList[fieldIndex].name
-                	});
-                }*/
             }
         }
-        // set chart labels here so that decoding occurs properly
-        //chartOptions.title.text = data.channel.name;
-        //chartOptions.xAxis.title.text = 'Date';
+}
+
+function addChartSeriesDataDebug(chartOptions){
+	window.console && console.log('ADD CHART SERIES DATA DEBUG');
+
+        // add all Channel data to the chart
+        for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+        {
+            for (var fieldIndex = 0; fieldIndex < channelKeysDebug[channelIndex].fieldList.length; fieldIndex++) // add each field
+            {
+                	window.console && console.log('Channel ' + channelIndex + ' field ' + fieldIndex);
+                		chartOptions.series.push({
+                   	 	data: channelKeysDebug[channelIndex].fieldList[fieldIndex].data,
+                   	 	index: channelKeysDebug[channelIndex].fieldList[fieldIndex].series,
+                   	 	yAxis: fieldIndex,//channelKeysTemp[channelIndex].fieldList[fieldIndex].axis,
+                   	 	//visible:false,
+                   	 	type:'spline',
+                   	 	name: channelKeysDebug[channelIndex].fieldList[fieldIndex].name
+                	});
+            }
+        }
 }
 
 
   // load the most recent 2500 points (fast initial load) from a ThingSpeak channel into a data[] array and return the data[] array
-    function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList, firstLoad, isTempChart) {
+    function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList, firstLoad, isTempChart, isDebugChart) {
     	window.console && console.log('LOAD TS CHANNEL');
 
         var fieldList = sentFieldList;
@@ -464,7 +511,7 @@ function addChartSeriesDataTemp(chartOptions){
                         	p[2] = parseFloat(v) + 180.0;
                         
                         }
-                        else if((fieldIndex == 1 || fieldIndex == 0) && !isTempChart){ // windgeschwindigkeit & Böe
+                        else if((fieldIndex == 1 || fieldIndex == 0) && (!isTempChart && !isDebugChart)){ // windgeschwindigkeit & Böe
                         	if(getCookie(isKnoten) == "1"){
 	                        	p[1] = parseFloat(v) * 0.539957; // convert to knots/knoten
 	                        }
@@ -493,29 +540,35 @@ function addChartSeriesDataTemp(chartOptions){
                   	channelKeysTemp[channelIndex].fieldList = fieldList;
                 	channelKeysTemp[channelIndex].loaded = true; 
                 }
-                else{
+                else if(isDebugChart){
+                	channelKeysDebug[channelIndex].fieldList = fieldList;
+                	channelKeysDebug[channelIndex].loaded = true;
+                }
+                else {
                 	channelKeys[channelIndex].fieldList = fieldList;
                 	channelKeys[channelIndex].loaded = true;
-                //	channelKeysTemp[channelIndex].fieldList = fieldList;
-                //	channelKeysTemp[channelIndex].loaded = true; 
-                
                 }
-
+                
                 channelsLoaded++;
                 window.console && console.log('channels Loaded:', channelsLoaded);
                 window.console && console.log('channel index:', channelIndex);
                 
-                if (channelsLoaded == (channelKeys.length+channelKeysTemp.length) && firstLoad == true) {
+                if (channelsLoaded == (channelKeys.length+channelKeysTemp.length+channelKeysDebug.length) && firstLoad == true) {
                   Highcharts.setOptions({lang:{weekdays:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]}}); 
 	                  createChart();
                   	  createChartTemp();
+					  createChartDebug();
                 }
                 else if (!firstLoad){
                 	if(isTempChart){
                 		addChartSeriesTemp();
                        	dynamicChartTemp.redraw();
                     }
-                    else{
+                    else if (isDebugChart){
+                    	addChartSeriesDebug();
+                       	dynamicChartDebug.redraw();
+                	}
+                	else{
                        	addChartSeries();
                        	dynamicChart.redraw();
                 	}
@@ -989,6 +1042,193 @@ function addChartSeriesDataTemp(chartOptions){
         }
     }
 
+
+  function createChartDebug() {
+  	window.console && console.log('CREATE CHART DEBUG');
+
+        // specify the chart options
+        var chartOptionsDebug = {
+            chart: {
+                renderTo: 'chartDebug-container',
+                zoomType: 'x'
+            },
+            colors: ['#AFAF00', '#00AAFF', '#D62021', '#f7a35c', '#8085e9', 
+   					'#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'],
+            rangeSelector: {
+
+                enabled: false
+               // selected: 1 //Change to 4th button as default
+            },
+            plotOptions: {
+                line: {
+                    gapSize: 1
+                },
+                series: {
+                    marker: {
+                        enabled: true,
+                        radius: 4
+                    },
+                    animation: true,
+                    step: false,
+                    turboThrehold: 0,
+                    borderWidth: 0,
+					lineWidth: 3
+
+                }
+            },
+            tooltip: {
+                shared: true,
+                valueDecimals: 1// ,
+	
+            },
+            title: {
+                text: 'Akku Ladestatus & Lichtstärke',
+                style: {
+                  "fontSize":"20px",
+                  "fontFamily":"Roboto"
+                }
+                
+            },
+
+            xAxis: {
+                type: 'datetime',	
+                ordinal: false,
+                offset: 0,
+               // min: Date.UTC(2018, 7, 5),
+                dateTimeLabelFormats: {
+                   minute: '%H:%M',
+                   hour: '%H:%M',
+                   day: '<b>%d. %b</b>'
+                },
+                labels:{
+                style: {
+                     fontSize:14
+                    }
+                }
+
+            },
+            yAxis: [{
+                labels: {
+                    format: '{value}%',
+                    style: {
+                     color: '#AFAF00',
+                     fontSize:15
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                opposite: false,
+                id: '%'
+            }, {
+                labels: {
+                    format: '{value}',
+                    style: {
+                     color: '#00AAFF',
+                     fontSize:15
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                opposite: true,
+                id: 'akku'
+            }/*,{
+                labels: {
+                    format: '{value}hPa'
+                },
+                title: {
+                    text: ''
+                },
+                opposite: true,
+                id: 'hPa'
+            }*/],
+            scrollbar: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false,
+                csv: {
+                    dateFormat: '%d/%m/%Y %H:%M:%S %p'
+                }
+            },
+            tooltip: {
+        headerFormat: "",
+        useHTML: true,
+        formatter: function () {
+        
+        
+            var s = '<span style="font-size: 11px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
+
+            $.each(this.points, function () {
+            	if(this.series.name == "Lightsensor"){
+                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + "% " + '</b><br/>'; 
+            	}
+            	else
+                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + " " + '</b><br/>'; 
+            });
+
+            return s;
+        }
+    },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                //color: 'white',
+                //fontWeight: 'bold',
+                fontSize: '17px'
+            }
+            },
+            navigator: {
+                enabled: false,
+                baseSeries: 0, //select which series to show in history navigator, First series is 0
+                series: {
+                    includeInCSVExport: false
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: []
+         
+            
+                //series: [{data:[[getChartDate("2013-06-16T00:32:40Z"),75]]}]
+        };
+
+		addChartSeriesDataDebug(chartOptionsDebug);
+
+        // draw the chart
+        dynamicChartDebug = new Highcharts.StockChart(chartOptionsDebug);
+
+
+                // update series number to account for the navigator series (The historical series at the bottom) which is the first series.
+        for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+        {
+            for (var fieldIndex = 0; fieldIndex < channelKeysDebug[channelIndex].fieldList.length; fieldIndex++) // and each field
+            {
+                for (var seriesIndex = 0; seriesIndex < channelKeysDebug.series.length; seriesIndex++) // compare each series name
+                {
+                    if (dynamicChartDebug.series[seriesIndex].name == channelKeysDebug[channelIndex].fieldList[fieldIndex].name) {
+                      //  channelKeysTemp[channelIndex].fieldList[fieldIndex].series = seriesIndex;
+                    }
+                }
+            }
+        }
+        
+        // add all history
+        //dynamicChart.showLoading("Loading History..." );
+        window.console && console.log('Channels: ', channelKeysDebug.length);
+        for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+        {
+            window.console && console.log('channelIndex: ', channelIndex);
+            (function(channelIndex) {
+                //load only 1 set of 8000 points
+                //loadChannelHistory(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, 0, 1);
+            })(channelIndex);
+        }
+    }
+
+
 //
 
 //  This is where the chart is generated.
@@ -1026,20 +1266,33 @@ $(document).ready(function() {
             seriesCounterTemp++;
         }
     }
+        var seriesCounterDebug = 0
+    for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+    {
+        for (var fieldIndex = 0; fieldIndex < channelKeysDebug[channelIndex].fieldList.length; fieldIndex++) // iterate through each channel
+        {
+            channelKeysDebug[channelIndex].fieldList[fieldIndex].series = seriesCounterDebug;
+            seriesCounterDebug++;
+        }
+    }
     //make calls to load data from each channel into channelKeys array now
     // draw the chart when all the data arrives, later asyncronously add history
     for (var channelIndex = 0; channelIndex < channelKeys.length; channelIndex++) // iterate through each channel
     {
 
         channelKeys[channelIndex].loaded = false;
-        loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, true, false);
-
+        loadThingSpeakChannel(channelIndex, channelKeys[channelIndex].channelNumber, channelKeys[channelIndex].key, channelKeys[channelIndex].fieldList, true, false, false);
     }
     for (var channelIndex = 0; channelIndex < channelKeysTemp.length; channelIndex++) // iterate through each channel
     {
 
         channelKeysTemp[channelIndex].loaded = false;
-        loadThingSpeakChannel(channelIndex, channelKeysTemp[channelIndex].channelNumber, channelKeysTemp[channelIndex].key, channelKeysTemp[channelIndex].fieldList, true, true);
+        loadThingSpeakChannel(channelIndex, channelKeysTemp[channelIndex].channelNumber, channelKeysTemp[channelIndex].key, channelKeysTemp[channelIndex].fieldList, true, true, false);
+    }
+    for (var channelIndex = 0; channelIndex < channelKeysDebug.length; channelIndex++) // iterate through each channel
+    {
+        channelKeysDebug[channelIndex].loaded = false;
+        loadThingSpeakChannel(channelIndex, channelKeysDebug[channelIndex].channelNumber, channelKeysDebug[channelIndex].key, channelKeysDebug[channelIndex].fieldList, true, false, true);
 
     }
     //window.console && console.log('Channel Keys',channelKeys);
