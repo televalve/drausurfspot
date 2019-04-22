@@ -628,12 +628,13 @@ function addChartSeriesDataTemp(chartOptions){
                 series: {
                     marker: {
                         enabled: true,
-                        radius: 3
+                        radius: 4
                     },
                     animation: true,
                     step: false,
                     turboThrehold: 0,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    lineWidth: 3
                 }
             },
             tooltip: {
@@ -685,7 +686,6 @@ function addChartSeriesDataTemp(chartOptions){
                 }*/
             },
             yAxis: [{
-                
                 labels: {
                     formatter: function(){
                         if(getCookie(isKnoten) == "1"){
@@ -824,12 +824,14 @@ function addChartSeriesDataTemp(chartOptions){
                 series: {
                     marker: {
                         enabled: true,
-                        radius: 3
+                        radius: 4
                     },
                     animation: true,
                     step: false,
                     turboThrehold: 0,
-                    borderWidth: 0
+                    borderWidth: 0,
+					lineWidth: 3
+
                 }
             },
             tooltip: {
