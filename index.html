@@ -673,6 +673,11 @@ function addChartSeriesDataTemp(chartOptions){
                    minute: '%H:%M',
                    hour: '%H:%M',
                    day: '<b>%d. %b</b>'
+                },
+                labels:{
+                style: {
+                     fontSize:14
+                    }
                 }
               /*,
                 title: {
@@ -689,6 +694,9 @@ function addChartSeriesDataTemp(chartOptions){
                     	else{
                     		return this.value + " km/h";
                     	}
+                    },
+                    style: {
+                     fontSize:15
                     }
                 },
                 title: {
@@ -734,7 +742,12 @@ function addChartSeriesDataTemp(chartOptions){
         }
     },
             legend: {
-                enabled: true
+                enabled: true,
+                itemStyle: {
+                //color: 'white',
+                //fontWeight: 'bold',
+                fontSize: '17px'
+                }
             },
             navigator: {
                 enabled: false,
@@ -842,6 +855,11 @@ function addChartSeriesDataTemp(chartOptions){
                    minute: '%H:%M',
                    hour: '%H:%M',
                    day: '<b>%d. %b</b>'
+                },
+                labels:{
+                style: {
+                     fontSize:14
+                    }
                 }
 
             },
@@ -849,7 +867,8 @@ function addChartSeriesDataTemp(chartOptions){
                 labels: {
                     format: '{value}°',
                     style: {
-                     color: '#AFAF00'
+                     color: '#AFAF00',
+                     fontSize:15
                     }
                 },
                 title: {
@@ -861,7 +880,8 @@ function addChartSeriesDataTemp(chartOptions){
                 labels: {
                     format: '{value}hPa',
                     style: {
-                     color: '#00AAFF'
+                     color: '#00AAFF',
+                     fontSize:15
                     }
                 },
                 title: {
@@ -908,7 +928,12 @@ function addChartSeriesDataTemp(chartOptions){
         }
     },
             legend: {
-                enabled: true
+                enabled: true,
+                itemStyle: {
+                //color: 'white',
+                //fontWeight: 'bold',
+                fontSize: '17px'
+            }
             },
             navigator: {
                 enabled: false,
