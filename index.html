@@ -192,10 +192,10 @@ var renderHeader = function () {
 				var tp = parseFloat(temperatur).toFixed(1);
 				var wd = parseFloat(winddir).toFixed(1);
            // 	var template2 = '<h5>Windstärke: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
-				var template = '<div style="float:left; width:15%;margin: 0% 0% 0% 25%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
-							   '<div style="float:left; width:15%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
-							   '<div style="float:left; width:15%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
-							   '<div style="float:left; width:15%;margin: 0% 15% 0% 0%" > <font color="gray"><h5>Temperatur </h5></font>  <h3>' + tp + '°C </h3> </div>';
+				var template = '<div style="float:left; width:20%;margin: 0% 0% 0% 15%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 5% 0% 0%" > <font color="gray"><h5>Temperatur </h5></font>  <h3>' + tp + '°C </h3> </div>';
 			    document.querySelector('#header-container').innerHTML = template;            	
             })
             .fail(function() {
