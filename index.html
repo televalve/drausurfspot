@@ -34,10 +34,14 @@
 <body style="background-color: white;">
 <header>
 <center>
-  <h5>Selkach Drau-Wetterstation</h5>
+  <h4>Selkach Drau-Wetterstation</h4>
   <p></p>
   </center>
 </header>
+ <div id="header-container" style="height: 180px;margin: 0% 10% 0% 10%">
+
+ </div>
+
  <div style="clear: left;margin: 0% 10% 0% 10%" id="below chart">
         
         <div class="row">
@@ -59,9 +63,8 @@
             </button>
 
         </div>
-        
-
-        
+ </div>
+  
    <!-- <div class="row">
            <div class="input-field col s4">
             <select id="Channel Select">
@@ -76,7 +79,6 @@
             </select>
           </div>
         </div> -->
-    </div>
 
     <div id="chart-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
         <div class="progress" style="margin:0% 0%">
@@ -92,7 +94,7 @@
         </div>
 
     </div>
-        <div id="chartDebug-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
+    <div id="chartDebug-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
     	<div class="progress" style="margin:0% 0%">
             
         	<div class="indeterminate"></div>
@@ -107,15 +109,7 @@
 
 <!-- <script src='//static.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script> -->
 <script >// Webpage Javascript to chart multiple ThingSpeak channels on two axis with navigator, load historical data, and export cvs data.
-// Public Domain, by turgo.
-//  The charting library is called HighStock.  It is awesome!  HighSoft, the owners say,
-//   "Do you want to use Highstock for a personal or non-profit project? Then you can use Highchcarts for
-//   free under the  Creative Commons Attribution-NonCommercial 3.0 License. "
-// http://forum.arduino.cc/index.php?topic=213058.msg1560990#msg1560990
-var dynamicChart;
-var dynamicChartTemp;
-var dynamicChartDebug;
-var channelsLoaded = 0;
+
 // put your ThingSpeak Channel#, Channel Name, and API keys here.
 // fieldList shows which field you want to load, and which axis to display that field on,
 // the 'T' Temperature left axis, or the 'O' Other right axis.
@@ -144,7 +138,7 @@ channelKeysTemp.push({
     key: '',
     fieldList: [{
         field: 4,
-        axis: '°'
+        axis: '°C'
     }, {
         field: 5,
         axis: 'hPa'
@@ -170,6 +164,55 @@ channelKeysDebug.push({
         axis: '%'
     }*/]
 });
+
+var renderHeader = function () {
+   $.getJSON('https://www.thingspeak.com/channels/' + channelKeys[0].channelNumber + '/feed.json?callback=?&amp;offset=0&amp;results=1;key=' + channelKeys[0].key, function(data) {
+                // if no access
+                if (data == '-1') {
+                    window.console && console.log('Thingspeak Data Loading Error');
+                }
+                window.console && console.log('HEADER QUERY');
+
+                var fieldStr = "data.feeds[0].field1";
+            	var windspeed = eval(fieldStr);
+            	fieldStr = "data.feeds[0].field7";
+            	var windgust = eval(fieldStr);
+            	fieldStr = "data.feeds[0].field4";
+            	var temperatur = eval(fieldStr);
+            	fieldStr = "data.feeds[0].field8";
+            	var winddir = eval(fieldStr);
+            	
+				if(getCookie(isKnoten) == "1"){
+					windspeed = windspeed * 0.539957; // convert to knots/knoten
+					windgust = windgust * 0.539957; // convert to knots/knoten
+				}
+
+            	var ws = parseFloat(windspeed).toFixed(1); 
+				var wg = parseFloat(windgust).toFixed(1);
+				var tp = parseFloat(temperatur).toFixed(1);
+				var wd = parseFloat(winddir).toFixed(1);
+           // 	var template2 = '<h5>Windstärke: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
+				var template = '<div style="float:left; width:20%;margin: 0% 0% 0% 10%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
+							   '<div style="float:left; width:20%;margin: 0% 10% 0% 0%" > <font color="gray"><h5>Temperatur </h5></font>  <h3>' + tp + '°C </h3> </div>';
+			    document.querySelector('#header-container').innerHTML = template;            	
+            })
+            .fail(function() {
+                alert('getJSON request failed! ');
+            });
+};
+renderHeader();
+
+//  The charting library is called HighStock.  It is awesome!  HighSoft, the owners say,
+//   "Do you want to use Highstock for a personal or non-profit project? Then you can use Highchcarts for
+//   free under the  Creative Commons Attribution-NonCommercial 3.0 License. "
+// http://forum.arduino.cc/index.php?topic=213058.msg1560990#msg1560990
+var dynamicChart;
+var dynamicChartTemp;
+var dynamicChartDebug;
+var channelsLoaded = 0;
+
 
 // user's timezone offset
 var myOffset = new Date().getTimezoneOffset();
@@ -245,6 +288,7 @@ function getChartDate(d) {
 function setknoten(){
 	if(getCookie(isKnoten) == "0"){
 		setCookie(isKnoten, "1");
+		renderHeader();
 		updateAllChannels();
 	}
 }
@@ -252,6 +296,7 @@ function setknoten(){
 function setkmh(){
 	if(getCookie(isKnoten) == "1"){
 		setCookie(isKnoten, "0");
+		renderHeader();
 		updateAllChannels();
 	}
 }
@@ -296,6 +341,47 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function getWindDirName(angle){
+	
+	if(angle < 22.5)
+		return "Nord";
+	else if (angle < 45.0)
+		return "Nordnordost";
+	else if (angle < 67.5)
+		return "Nordost";
+	else if (angle < 90.0)
+		return "Ostnordost";
+	else if (angle < 112.5)
+		return "Ost";
+	else if (angle < 135.0)
+		return "Ostsüdost";
+	else if (angle < 157.5)
+		return "Südost";
+	else if (angle < 180.0)
+		return "Südsüdost";
+	else if (angle < 202.5)
+		return "Süd";
+	else if (angle < 225.0)
+		return "Südsüdwest";
+	else if (angle < 247.5)
+		return "Südwest";
+	else if (angle < 270.0)
+		return "Westsüdwest";
+	else if (angle < 292.5)
+		return "West";
+	else if (angle < 315.0)
+		return "Westnordwest";
+	else if (angle < 337.5)
+		return "Nordwest";
+	else if (angle < 360.0)
+		return "Nordnordwest";
+
+
+
+	return "Norden";
+
 }
 
 // Hide all series, via 'Hide All' button.  Then user can click on serries name in legent to show series of interest.
@@ -406,7 +492,7 @@ function addChartSeriesData(chartOptions){
                    	 	index: channelKeys[channelIndex].fieldList[fieldIndex].series,
                    	 	yAxis: channelKeys[channelIndex].fieldList[fieldIndex].axis,
                    	 	//visible:false,
-                   	 	type:'spline',
+                   	 	type:'areaspline',
                    	 	name: channelKeys[channelIndex].fieldList[fieldIndex].name
                 	});
                 }
@@ -477,7 +563,7 @@ function addChartSeriesDataDebug(chartOptions){
 
 
   // load the most recent 2500 points (fast initial load) from a ThingSpeak channel into a data[] array and return the data[] array
-    function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList, firstLoad, isTempChart, isDebugChart) {
+ function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldList, firstLoad, isTempChart, isDebugChart) {
     	window.console && console.log('LOAD TS CHANNEL');
 
         var fieldList = sentFieldList;
@@ -502,15 +588,13 @@ function addChartSeriesDataDebug(chartOptions){
                         var addIt = true;
                         p[0] = getChartDate(data.feeds[h].created_at);
                         
-                        if(fieldIndex == 2 && !isTempChart){ // windrichtung Böe
-                        	//p[0] = Date.UTC(2018, 6, 6, 23, 12, 42);
-                        	//    return Date.UTC(d.substring(0, 4), d.substring(5, 7) - 1, d.substring(8, 10), d.substring(11, 13), d.substring(14, 16), d.substring(17, 19)) - (myOffset * 60000);
+                        if(fieldIndex == 2 && (!isTempChart && !isDebugChart)){ // windrichtung Böe
 							if(!((h % getSkipPoints()) == 0)){
 								addIt = false;
 							}
 
   							p[1] = 1;
-                        	p[2] = parseFloat(v) + 180.0;
+                        	p[2] = parseFloat(v);// + 180.0;
                         
                         }
                         else if((fieldIndex == 1 || fieldIndex == 0) && (!isTempChart && !isDebugChart)){ // windgeschwindigkeit & Böe
@@ -588,8 +672,9 @@ function addChartSeriesDataDebug(chartOptions){
         // specify the chart options
         var chartOptions = {
             chart: {
+                type: 'areaspline',
                 renderTo: 'chart-container',
-                zoomType: 'x',
+                zoomType: 'x'
                 /*events: {
                     load: function() {
                         if ('true' === 'true' && (''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1 && ''.length < 1)) {
@@ -751,7 +836,7 @@ function addChartSeriesDataDebug(chartOptions){
                     	}
                     },
                     style: {
-                     fontSize:15
+                     fontSize:18
                     }
                 },
                 title: {
@@ -783,14 +868,18 @@ function addChartSeriesDataDebug(chartOptions){
         useHTML: true,
         formatter: function () {
         
-        
-            var s = '<span style="font-size: 11px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
+            var s = '<span style="font-size: 15px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
 
             $.each(this.points, function () {
             	if(this.series.name == "Böe Windrichtung"){
+            	  //  s += '<br/><span style="font-size: 20px; color:' + this.color + '"><b>' + this. + '</b><br/></span>'; 
+
             	}
+            	else if(this.series.name == "Böe"){
+                	s += '<br/><span style="font-size: 20px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 1) + " " + getWindspeedUnit() + " (Böe)" +'</b><br/></span>'; 
+				}
             	else
-                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + " " + getWindspeedUnit() + '</b><br/>'; 
+                	s += '<br/><span style="font-size: 20px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 1) + " " + getWindspeedUnit() + '</b><br/></span>'; 
             });
 
             return s;
@@ -922,23 +1011,23 @@ function addChartSeriesDataDebug(chartOptions){
             },
             yAxis: [{
                 labels: {
-                    format: '{value}°',
+                    format: '{value}°C',
                     style: {
                      color: '#AFAF00',
-                     fontSize:15
+                     fontSize:18
                     }
                 },
                 title: {
                     text: ''
                 },
                 opposite: false,
-                id: '°'
+                id: '°C'
             }, {
                 labels: {
                     format: '{value}hPa',
                     style: {
                      color: '#00AAFF',
-                     fontSize:15
+                     fontSize:18
                     }
                 },
                 title: {
@@ -971,14 +1060,15 @@ function addChartSeriesDataDebug(chartOptions){
         formatter: function () {
         
         
-            var s = '<span style="font-size: 11px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
+            var s = '<span style="font-size: 15px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
 
             $.each(this.points, function () {
             	if(this.series.name == "Temperatur"){
-                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + "° " + '</b><br/>'; 
+					s += '<br/><span style="font-size: 22px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 1) + "°C " +'</b><br/></span>'; 
+
             	}
             	else
-                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + "hPa " + '</b><br/>'; 
+					s += '<br/><span style="font-size: 22px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 1) + "hPa " +'</b><br/></span>'; 
             });
 
             return s;
@@ -1114,7 +1204,7 @@ function addChartSeriesDataDebug(chartOptions){
                     format: '{value}%',
                     style: {
                      color: '#AFAF00',
-                     fontSize:15
+                     fontSize:18
                     }
                 },
                 title: {
@@ -1127,7 +1217,7 @@ function addChartSeriesDataDebug(chartOptions){
                     format: '{value}',
                     style: {
                      color: '#00AAFF',
-                     fontSize:15
+                     fontSize:18
                     }
                 },
                 title: {
@@ -1160,14 +1250,14 @@ function addChartSeriesDataDebug(chartOptions){
         formatter: function () {
         
         
-            var s = '<span style="font-size: 11px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
+            var s = '<span style="font-size: 15px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
 
             $.each(this.points, function () {
             	if(this.series.name == "Lightsensor"){
-                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + "% " + '</b><br/>'; 
+					s += '<br/><span style="font-size: 22px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 0) + "% " +'</b><br/></span>'; 
             	}
             	else
-                	s += '<br/><span style="color:' + this.color + '">\u25CF</span><b>' + this.series.name + ": " + Highcharts.numberFormat(this.y, 1) + " " + '</b><br/>'; 
+					s += '<br/><span style="font-size: 22px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 1) +'</b><br/></span>'; 
             });
 
             return s;
