@@ -101,7 +101,14 @@
         </div>
 
     </div>
-   
+ <div style="clear: left;margin: 0% 10% 0% 10%" id="debugChartButton">
+        
+        <div class="row">
+            <button class="btn waves-effect waves-light blue darken-3" value="showDebug" name="showDebug" onclick="setkmh();">showDebug
+            </button>
+
+        </div>
+ </div>
 
 </body>
 
@@ -183,7 +190,6 @@ var renderHeader = function () {
             	var winddir = eval(fieldStr);
             	var date = getChartDate(data.feeds[0].created_at);
 
-            	
             	
 				if(getCookie(isKnoten) == "1"){
 					windspeed = windspeed * 0.539957; // convert to knots/knoten
@@ -848,7 +854,8 @@ function createChart() {
                     text: ''
                 },
                 opposite: false,
-                id: 'km/h'
+                id: 'km/h',
+                showLastLabel:true
             }, {
                 labels: {
                     format: '{value}°'
@@ -857,7 +864,8 @@ function createChart() {
                     text: ''
                 },
                 opposite: true,
-                id: '°'
+                id: '°',
+                showLastLabel:true
             }],
             scrollbar: {
                 enabled: false
@@ -1026,7 +1034,8 @@ function createChartTemp() {
                     text: ''
                 },
                 opposite: false,
-                id: '°C'
+                id: '°C',
+                showLastLabel:true
             }, {
                 labels: {
                     format: '{value}hPa',
@@ -1039,7 +1048,8 @@ function createChartTemp() {
                     text: ''
                 },
                 opposite: true,
-                id: 'hPa'
+                id: 'hPa',
+                showLastLabel:true
             }/*,{
                 labels: {
                     format: '{value}hPa'
@@ -1216,7 +1226,15 @@ function createChartDebug() {
                     text: ''
                 },
                 opposite: false,
-                id: '%'
+                id: '%',
+                floor: 0,
+                allowDecimals: true,
+                ceiling: 100.0,
+                max: 100,
+                endOnTick: true,
+                min: 0,
+                showLastLabel:true,
+                alignTicks:true,
             }, {
                 labels: {
                     format: '{value}',
@@ -1229,7 +1247,16 @@ function createChartDebug() {
                     text: ''
                 },
                 opposite: true,
-                id: 'akku'
+                id: 'akku',
+                floor: 0,
+                alignTicks:true,
+                allowDecimals: false,
+                ceiling: 4,
+                max: 4,
+                min:0,
+                endOnTick: true,
+                showLastLabel:false
+               // min: 0
             }/*,{
                 labels: {
                     format: '{value}hPa'
@@ -1258,7 +1285,7 @@ function createChartDebug() {
             var s = '<span style="font-size: 15px">' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(this.x)) + '</span>';
 
             $.each(this.points, function () {
-            	if(this.series.name == "Lightsensor"){
+            	if(this.series.name == "Lichtstärke"){
 					s += '<br/><span style="font-size: 22px; color:' + this.color + '"><b>' + Highcharts.numberFormat(this.y, 0) + "% " +'</b><br/></span>'; 
             	}
             	else
