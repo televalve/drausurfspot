@@ -203,12 +203,12 @@ var renderHeader = function () {
 				var tp = parseFloat(temperatur).toFixed(1);
 				var wd = parseFloat(winddir).toFixed(1);
            // 	var template2 = '<h5>Windstärke: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
-				var template = '<div style="float:left; width:22%;margin: 0% 0% 0% 12%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
-							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
-							   '<div style="float:left; width:10%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
-							   '<div style="float:left; width:3%;margin: 0% 7% 0% 0%; transform: rotate(' + wd + 'deg)" >  <font color="black"><h1>&#8681</h1></font> </div>' + 
-							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%;" > <font color="gray"><h5>Temperatur	 </h5></font>  <h3>' + tp + '°C </h3> </div>' +
-							   '<div style="float:left; width:50%;margin: 0% 0% 0% 12%" > <font color="gray"> <font size="5"> Letztes Update: ' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(date))	+ '</font>  </div>';
+				var template = '<div style="float:left; width:21%;margin: 0% 0% 0% 10%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:21%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
+							   '<div style="float:left; width:15%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
+							   '<div style="float:left; width:2%;margin:  0% 10% 0% 0%;transform: rotate(' + wd + 'deg)" >  <font color="black"><h1 style="transform: rotate(90deg)">➤</h1></font> </div>' + 
+							   '<div style="float:left; width:21%;margin: 0% 0% 0% 0%;" > <font color="gray"><h5>Temperatur	 </h5></font>  <h3>' + tp + '°C </h3> </div>' +
+							   '<div style="float:left; width:50%;margin: 0% 0% 0% 10%" > <font color="gray"> <font size="5"> Letztes Update: ' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(date))	+ '</font>  </div>';
 
 			    document.querySelector('#header-container').innerHTML = template;            	
             })
