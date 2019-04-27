@@ -29,6 +29,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
     <title>Drau Surfspot</title>
+    
+    
 </head>
 
 <body style="background-color: white;">
@@ -38,10 +40,11 @@
   <p></p>
   </center>
 </header>
+
  <div id="header-container" style="height: 200px;margin: 0% 0% 0% 0%">
 
  </div>
-
+ 
  <div style="clear: left;margin: 0% 10% 0% 10%" id="below chart">
         
         <div class="row">
@@ -88,7 +91,7 @@
 
     </div>
     
-<hr width="70%" align="center" noshade> 
+	<hr width="70%" align="center" noshade> 
 
     <div id="chartTemp-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
     	<div class="progress" style="margin:0% 0%">
@@ -97,6 +100,7 @@
         </div>
 
     </div>
+    
     <hr width="70%" align="center" noshade> 
 
     <div id="chartDebug-container" style="height: 450px;/*float:left; width:43% */;margin: 0% 10% 0% 10%">
@@ -201,8 +205,9 @@ var renderHeader = function () {
            // 	var template2 = '<h5>Windstärke: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
 				var template = '<div style="float:left; width:22%;margin: 0% 0% 0% 12%" > <font color="gray"> <h5>Windstärke </h5> </font> <h3>' + ws + ' ' + getWindspeedUnit() + '</h3> </div>' + 
 							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
-							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
-							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%" > <font color="gray"><h5>Temperatur	 </h5></font>  <h3>' + tp + '°C </h3> </div>' +
+							   '<div style="float:left; width:10%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
+							   '<div style="float:left; width:3%;margin: 0% 7% 0% 0%; transform: rotate(' + wd + 'deg)" >  <font color="black"><h1>&#8681</h1></font> </div>' + 
+							   '<div style="float:left; width:22%;margin: 0% 0% 0% 0%;" > <font color="gray"><h5>Temperatur	 </h5></font>  <h3>' + tp + '°C </h3> </div>' +
 							   '<div style="float:left; width:50%;margin: 0% 0% 0% 12%" > <font color="gray"> <font size="5"> Letztes Update: ' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(date))	+ '</font>  </div>';
 
 			    document.querySelector('#header-container').innerHTML = template;            	
@@ -386,12 +391,48 @@ function getWindDirName(angle){
 		return "Nordwest";
 	else if (angle < 360.0)
 		return "Nordnordwest";
-
-
-
-	return "Norden";
-
+		
+	return "";
 }
+
+function getShortWindDirName(angle){
+	
+	if(angle < 22.5)
+		return "N";
+	else if (angle < 45.0)
+		return "NNO";
+	else if (angle < 67.5)
+		return "NO";
+	else if (angle < 90.0)
+		return "ONO";
+	else if (angle < 112.5)
+		return "O";
+	else if (angle < 135.0)
+		return "OSO";
+	else if (angle < 157.5)
+		return "SO";
+	else if (angle < 180.0)
+		return "SSO";
+	else if (angle < 202.5)
+		return "S";
+	else if (angle < 225.0)
+		return "SSW";
+	else if (angle < 247.5)
+		return "SW";
+	else if (angle < 270.0)
+		return "WSW";
+	else if (angle < 292.5)
+		return "W";
+	else if (angle < 315.0)
+		return "WNW";
+	else if (angle < 337.5)
+		return "NW";
+	else if (angle < 360.0)
+		return "NNW";
+		
+	return "";
+}
+
 
 // Hide all series, via 'Hide All' button.  Then user can click on serries name in legent to show series of interest.
 /*function HideAll() {
