@@ -267,16 +267,16 @@ function getNumPoints(){
 
 function getSkipPoints(){
 	var level = getCookie(zoom);
-	if(level == 0){
+	if(level == 0){ // 3hrs no point is skipped
 		return 1; 
 	}
-	else if(level == 1){
+	else if(level == 1){ // 12 hrs every 2nd pt is skipped
 		return 2;
 	}
-	else if(level == 2){
+	else if(level == 2){ // 1 day 2pts are skipped
 		return 3;
 	}
-	else if(level == 3){
+	else if(level == 3){ // 1week 19 pts are sipped
 		return 20;
 	}
 }
@@ -555,7 +555,7 @@ function addChartSeriesData(chartOptions){
                    	 	//visible:false,
                    	 	type:'windbarb',
                    	 	showInLegend: true,
-						vectorLength: 25,
+						vectorLength: 20,
 //                    	 	marker:{
 //                    	 		radius: 3
 //                    	 	},
@@ -660,7 +660,7 @@ function loadThingSpeakChannel(sentChannelIndex, channelNumber, key, sentFieldLi
                         }
                       
                         // if a numerical value exists add it
-                        if (!isNaN(parseInt(v)) && addIt) {
+                        if (!isNaN(parseInt(v)) /*&& addIt*/) {
                             fieldList[fieldIndex].data.push(p);
                         }
                     }
