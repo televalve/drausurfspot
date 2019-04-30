@@ -208,7 +208,7 @@ var renderHeader = function () {
 						    //   '<div style="float:left; width:21%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
 							   '<div style="float:left; width:31%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Windrichtung </h5></font>  <h3>' + getWindDirName(wd) + ' </h3> </div>' + 
 							   '<div style="float:left; width:20%;margin: 0% 0% 0% 0%;" > <font color="gray"><h5>Temperatur	 </h5></font>  <h3>' + tp + '°C </h3> </div>' +
-							   '<div style="float:left; width:50%;margin: 0% 0% 0% 10%" > <font color="gray"> <font size="5"> Letztes Update: ' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(date))	+ '</font>  </div>';
+							   '<div style="float:left; width:50%;margin: 0% 0% 0% 10%" > <font color="gray"> <font size="4"> Letztes Update: ' + Highcharts.dateFormat('%H:%M:%S  - %a, %e %b, %Y', new Date(date))	+ '</font>  </div>';
 
 			    document.querySelector('#header-container').innerHTML = template;            	
             })
