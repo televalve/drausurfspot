@@ -202,7 +202,7 @@ var renderHeader = function () {
 				var wg = parseFloat(windgust).toFixed(1);
 				var tp = parseFloat(temperatur).toFixed(1);
 				var wd = parseFloat(winddir).toFixed(1);
-           // 	var template2 = '<h5>Windstärke: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
+           // 	var template2 = '<h5>Wind: ' + ws + ' ' + getWindspeedUnit() + '</h5> <h5>Böe: ' + wg + ' ' + getWindspeedUnit() + '</h5> <h5>Windrichtung: ' + getWindDirName(wd) + '</h5> </h5> <h5>Temperatur: ' + tp + '°C </h5>';
 				var template = '<div style="float:left; width:35%;margin: 0% 0% 0% 10%" > <font color="gray"> <h5>Windstärke | Böe </h5> </font> <h3>' + ws + '  |  ' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
 							   '<div style="float:left; width:1%;margin:  0% 3% 0% 0%;transform: rotate(' + wd + 'deg)" >  <font color="black"><h1 style="transform: rotate(90deg)">➤</h1></font> </div>' + 
 						    //   '<div style="float:left; width:21%;margin: 0% 0% 0% 0%" >  <font color="gray"><h5>Böe </h5> </font> <h3>' + wg + ' ' + getWindspeedUnit() + '</h3> </div>' + 
